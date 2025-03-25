@@ -1,4 +1,5 @@
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,19 +69,45 @@ public class App
              }
     }
 
+    static long multiply(long x, long y, long n) {
+        cont++;
+        if (n == 1) {
+            return x * y;
+        } else {
+            long m = n >> 1;
+            System.out.printf("m = %d\n", m);
+            long a = x >> m;
+            System.out.printf("a = %d\n", a);
+            long b = x % (1<<m);
+            System.out.printf("b = %d\n", b);
+            long c = y >> m;
+            System.out.printf("c = %d\n", c);
+            long d = y % (1<<m);
+            System.out.printf("d = %d\n", d);
+            long e = multiply(a, c, m);
+            System.out.printf("e = %d\n", e);
+            long f = multiply(b, d, m);
+            System.out.printf("f = %d\n", f);
+            long g = multiply(b, c, m);
+            System.out.printf("g = %d\n", g);
+            long h = multiply(a, d, m);
+            System.out.printf("h = %d\n", h);
+            return (1<<(2*m))*e + (1<<m)*(g+h) + f;
+        }
+    }
+
     public static void main( String[] args )
     {
         cont = 0;
-        Random rng = new Random();
-        int size = 2048;
-        var list = new long[size];
-        for (int i = 0; i < size; i++) {
-            list[i] = rng.nextInt(size);
-        }
-        var startTime = System.nanoTime();
-        maxVal1(list, size);
-        var endTime = System.nanoTime();
-        System.out.println(endTime-startTime);
+        System.out.printf("%d * %d = %d\n",0b1111, 0b1010, multiply(0b1111, 0b1010, 4));
         System.out.println(cont);
+        cont = 0;
+        System.out.printf("%d * %d = %d\n", 10000, 11000, multiply(10000, 11000, 16));
+        System.out.println(cont);
+        cont = 0;
+        Random rng = new Random();
+        long x = rng.nextLong()/2;
+        long y = rng.nextLong()/2;
+        //System.out.printf("%d * %d = %d\n", x, y, multiply(x, y, 32));
     }
 }
